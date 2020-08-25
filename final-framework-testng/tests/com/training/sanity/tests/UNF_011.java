@@ -1,12 +1,20 @@
 package com.training.sanity.tests;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.AssertJUnit;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -17,8 +25,7 @@ import com.training.pom.LoginPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
-public class LoginTests {
-
+public class UNF_011 {
 	private WebDriver driver;
 	private String baseUrl;
 	private LoginPOM loginPOM;
@@ -33,23 +40,26 @@ public class LoginTests {
 		properties.load(inStream);
 	}
 
+	
 	@BeforeMethod
 	public void setUp() throws Exception {
 		driver = DriverFactory.getDriver(DriverNames.CHROME);
-		loginPOM = new LoginPOM(driver); 
-		//baseUrl = properties.getProperty("baseURL");
+		loginPOM = new LoginPOM(driver);
+		// baseUrl = properties.getProperty("baseURL");
 		adminUrl = properties.getProperty("adminURL");
-		screenShot = new ScreenShot(driver); 
-		// open the browser 
-		//driver.get(baseUrl);
+		screenShot = new ScreenShot(driver);
+		// open the browser
+		// driver.get(baseUrl);
 		driver.get(adminUrl);
 	}
+
 	
 	@AfterMethod
 	public void tearDown() throws Exception {
 		Thread.sleep(1000);
 		driver.quit();
 	}
+
 	@Test
 	public void validLoginTest() throws InterruptedException {
 		loginPOM.sendUserName("admin");
@@ -57,9 +67,19 @@ public class LoginTests {
 		loginPOM.clickLoginBtn();
 		Thread.sleep(300);
 		String expectedText = "Dashboard";
-		Assert.assertEquals(driver.findElement(By.linkText("Dashboard")).getText(),expectedText);
-		//System.out.println(driver.findElement(By.linkText("Dashboard")).getText());
+		AssertJUnit.assertEquals(driver.findElement(By.linkText("Dashboard")).getText(), expectedText);
+		// System.out.println(driver.findElement(By.linkText("Dashboard")).getText());
 		screenShot.captureScreenShot("First");
+		loginPOM.firstLHNElement();
+		Thread.sleep(300);
+		loginPOM.OptionCategory().click().perform();
+		System.out.println("Product"+loginPOM.OptionProducts().toString());
+		AssertJUnit.assertEquals(driver.findElement(By.linkText("Categories")).getText(), "Categories");
+		AssertJUnit.assertEquals(loginPOM.TableColumnCategoris().getText(), "Category Name");
+		AssertJUnit.assertEquals(loginPOM.TableColumnSortOrder().getText(), "Sort Order");
+		AssertJUnit.assertEquals(loginPOM.TableColumnAction().getText(), "Action");
+		loginPOM.SelectCheckbox().click();
 		
+		//screenShot.captureScreenShot("CategoryTable");
 	}
 }

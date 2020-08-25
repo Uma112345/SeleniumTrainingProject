@@ -1,5 +1,10 @@
 package com.training.sanity.tests;
 
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.AssertJUnit;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -17,8 +22,7 @@ import com.training.pom.LoginPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
-public class LoginTests {
-
+public class UNF_010 {
 	private WebDriver driver;
 	private String baseUrl;
 	private LoginPOM loginPOM;
@@ -34,6 +38,7 @@ public class LoginTests {
 	}
 
 	@BeforeMethod
+	
 	public void setUp() throws Exception {
 		driver = DriverFactory.getDriver(DriverNames.CHROME);
 		loginPOM = new LoginPOM(driver); 
@@ -45,10 +50,11 @@ public class LoginTests {
 		driver.get(adminUrl);
 	}
 	
+	
 	@AfterMethod
 	public void tearDown() throws Exception {
 		Thread.sleep(1000);
-		driver.quit();
+		//driver.quit();
 	}
 	@Test
 	public void validLoginTest() throws InterruptedException {
@@ -57,7 +63,7 @@ public class LoginTests {
 		loginPOM.clickLoginBtn();
 		Thread.sleep(300);
 		String expectedText = "Dashboard";
-		Assert.assertEquals(driver.findElement(By.linkText("Dashboard")).getText(),expectedText);
+		AssertJUnit.assertEquals(driver.findElement(By.linkText("Dashboard")).getText(),expectedText);
 		//System.out.println(driver.findElement(By.linkText("Dashboard")).getText());
 		screenShot.captureScreenShot("First");
 		
